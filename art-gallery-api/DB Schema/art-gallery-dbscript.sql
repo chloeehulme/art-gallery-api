@@ -1,9 +1,9 @@
 CREATE TABLE public.state (
     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(50) NOT NULL,
-    language_groups INT NOT NULL,
-    created_date TIMESTAMP NOT NULL,
-    modified_date TIMESTAMP NOT NULL,
+    languagegroups INT NOT NULL,
+    createddate TIMESTAMP NOT NULL,
+    modifieddate TIMESTAMP NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -13,9 +13,9 @@ CREATE TABLE public.artist (
     description VARCHAR(800) NULL,
     age INT NOT NULL,
     state VARCHAR(50) NOT NULL,
-    language_group VARCHAR(100) NOT NULL,
-    created_date TIMESTAMP NOT NULL,
-    modified_date TIMESTAMP NOT NULL,
+    languagegroup VARCHAR(100) NOT NULL,
+    createddate TIMESTAMP NOT NULL,
+    modifieddate TIMESTAMP NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -26,11 +26,11 @@ CREATE TABLE public.artefact (
     description VARCHAR(800) NULL,
     medium VARCHAR(50) NOT NULL,
     year INT NOT NULL,
-    height_cm DECIMAL NOT NULL,
-    width_cm DECIMAL NOT NULL,
-    img_url VARCHAR(200) NULL,
-    created_date TIMESTAMP NOT NULL,
-    modified_date TIMESTAMP NOT NULL,
+    heightcm DECIMAL NOT NULL,
+    widthcm DECIMAL NOT NULL,
+    imgurl VARCHAR(200) NULL,
+    createddate TIMESTAMP NOT NULL,
+    modifieddate TIMESTAMP NOT NULL,
     PRIMARY KEY (id)
 );
 
