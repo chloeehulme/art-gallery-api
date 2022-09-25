@@ -23,8 +23,8 @@ namespace art_gallery_api.Persistence
         {
             string command = $"SELECT * FROM {TABLE_NAME}";
 
-            var artefact = conn.Query<Artefact>(command).ToList();
-            return artefact.ToList();
+            var artefact = conn.Query<Artefact>(command).AsList();
+            return artefact;
         }
 
         public Artefact? GetArtefactById(int id)
@@ -38,8 +38,8 @@ namespace art_gallery_api.Persistence
         void IArtefactDataAccess.UpdateArtefact(int id, Artefact updatedArtefact)
         {
             string command = $"UPDATE {TABLE_NAME} SET title=@title, description=@description, medium=@medium, " +
-                $"year=@year, height_cm=@height_cm, width_cm=@width_cm, img_url=@img_url, artist=@artist, " +
-                $"modified_date=@modified_date WHERE id={id} RETURNING *";
+                $"year=@year, heightcm=@heightcm, widthcm=@widthcm, imgurl=@imgurl, artist=@artist, " +
+                $"modifieddate=@modifieddate WHERE id={id} RETURNING *";
 
             var queryArgs = new
             {
@@ -47,11 +47,11 @@ namespace art_gallery_api.Persistence
                 description = updatedArtefact.Description ?? (object)DBNull.Value,
                 medium = updatedArtefact.Medium,
                 year = updatedArtefact.Year,
-                height_cm = updatedArtefact.HeightCm,
-                width_cm = updatedArtefact.WidthCm,
-                img_url = updatedArtefact.ImgUrl ?? (object)DBNull.Value,
+                heightcm = updatedArtefact.HeightCm,
+                widthcm = updatedArtefact.WidthCm,
+                imgurl = updatedArtefact.ImgUrl ?? (object)DBNull.Value,
                 artist = updatedArtefact.Artist,
-                modified_date = DateTime.Now
+                modifieddate = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
@@ -59,8 +59,8 @@ namespace art_gallery_api.Persistence
 
         void IArtefactDataAccess.AddArtefact(Artefact newArtefact)
         {
-            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @title, @description, @medium, @year, @height_cm," +
-                $" @width_cm, @img_url, @artist, @created_date @modified_date)";
+            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @title, @description, @medium, @year, @heightcm," +
+                $" @widthcm, @imgurl, @artist, @createddate @modifieddate)";
 
             var queryArgs = new
             {
@@ -68,12 +68,12 @@ namespace art_gallery_api.Persistence
                 description = newArtefact.Description ?? (object)DBNull.Value,
                 medium = newArtefact.Medium,
                 year = newArtefact.Year,
-                height_cm = newArtefact.HeightCm,
-                width_cm = newArtefact.WidthCm,
-                img_url = newArtefact.ImgUrl ?? (object)DBNull.Value,
+                heightcm = newArtefact.HeightCm,
+                widthcm = newArtefact.WidthCm,
+                imgurl = newArtefact.ImgUrl ?? (object)DBNull.Value,
                 artist = newArtefact.Artist,
-                created_date = DateTime.Now,
-                modified_date = DateTime.Now
+                createddate = DateTime.Now,
+                modifieddate = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);

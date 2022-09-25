@@ -23,8 +23,8 @@ namespace art_gallery_api.Persistence
         {
             string command = $"SELECT * FROM {TABLE_NAME}";
 
-            var artists = conn.Query<Artist>(command).ToList();
-            return artists.ToList();
+            var artists = conn.Query<Artist>(command).AsList();
+            return artists;
         }
 
         public Artist? GetArtistById(int id)
@@ -38,7 +38,7 @@ namespace art_gallery_api.Persistence
         public void UpdateArtist(int id, Artist updatedArtist)
         {
             string command = $"UPDATE {TABLE_NAME} SET name=@name, description=@description, age=@age, state=@state" +
-                $"language_group=@language_group, modified_date=@modified_date WHERE id={id} RETURNING *";
+                $"languagegroup=@languagegroup, modifieddate=@modifieddate WHERE id={id}";
 
             var queryArgs = new
             {
@@ -46,8 +46,8 @@ namespace art_gallery_api.Persistence
                 description = updatedArtist.Description ?? (object)DBNull.Value,
                 age = updatedArtist.Age,
                 state = updatedArtist.State,
-                language_groups = updatedArtist.LanguageGroup,
-                modified_date = DateTime.Now
+                languagegroup = updatedArtist.LanguageGroup,
+                modifieddate = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
@@ -55,8 +55,8 @@ namespace art_gallery_api.Persistence
 
         public void AddArtist(Artist newArtist)
         {
-            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @name, @description, @age, @state, @language_group," +
-                $" @created_date, @modified_date)";
+            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @name, @description, @age, @state, @languagegroup," +
+                $" @createddate, @modifieddate)";
 
             var queryArgs = new
             {
@@ -64,9 +64,9 @@ namespace art_gallery_api.Persistence
                 description = newArtist.Description,
                 age = newArtist.Age,
                 state = newArtist.State,
-                language_group = newArtist.LanguageGroup,
-                created_date = DateTime.Now,
-                modified_date = DateTime.Now
+                languagegroup = newArtist.LanguageGroup,
+                createddate = DateTime.Now,
+                modifieddate = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);

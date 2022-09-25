@@ -23,8 +23,8 @@ namespace art_gallery_api.Persistence
         {
             string command = $"SELECT * FROM {TABLE_NAME}";
 
-            var states = conn.Query<State>(command).ToList();
-            return states.ToList();
+            var states = conn.Query<State>(command).AsList();
+            return states;
         }
 
         public State? GetStateById(int id)
@@ -37,14 +37,14 @@ namespace art_gallery_api.Persistence
 
         public void UpdateState(int id, State updatedState)
         {
-            string command = $"UPDATE {TABLE_NAME} SET name=@name, language_groups=@language_groups," +
-                $"modified_date=@modified_date WHERE id={id} RETURNING *";
+            string command = $"UPDATE {TABLE_NAME} SET name=@name, languagegroups=@languagegroups," +
+                $"modifieddate=@modifieddate WHERE id={id} RETURNING *";
 
             var queryArgs = new
             {
                 name = updatedState.Name,
-                language_groups = updatedState.LanguageGroups,
-                modified_date = DateTime.Now
+                languagegroups = updatedState.LanguageGroups,
+                modifieddate = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
