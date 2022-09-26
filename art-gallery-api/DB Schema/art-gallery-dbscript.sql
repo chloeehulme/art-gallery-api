@@ -12,16 +12,19 @@ CREATE TABLE public.artist (
     name VARCHAR(100) NOT NULL,
     description VARCHAR(800) NULL,
     age INT NOT NULL,
-    state VARCHAR(50) NOT NULL,
+    stateid INT NOT NULL,
     languagegroup VARCHAR(100) NOT NULL,
     createddate TIMESTAMP NOT NULL,
     modifieddate TIMESTAMP NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT fk_state
+        FOREIGN KEY (stateid)
+            REFERENCES public.state(id)
 );
 
 CREATE TABLE public.artefact (
     id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
-    artist VARCHAR(100) NOT NULL,
+    artistid INT NOT NULL,
     title VARCHAR(100) NOT NULL,
     description VARCHAR(800) NULL,
     medium VARCHAR(50) NOT NULL,
@@ -31,7 +34,23 @@ CREATE TABLE public.artefact (
     imgurl VARCHAR(200) NULL,
     createddate TIMESTAMP NOT NULL,
     modifieddate TIMESTAMP NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT fk_artist
+        FOREIGN KEY (artistid)
+            REFERENCES public.artist(id)
+);
+
+CREATE TABLE public.user (
+    userid INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+    email VARCHAR(200) NOT NULL,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    passwordhash VARCHAR(300) NOT NULL,
+    description VARCHAR(800) NULL,
+    role VARCHAR(800) NULL,
+    createddate TIMESTAMP NOT NULL,
+    modifieddate TIMESTAMP NOT NULL,
+    PRIMARY KEY (userid)
 );
 
 INSERT INTO public.state VALUES(DEFAULT, 'Victoria', 38, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
