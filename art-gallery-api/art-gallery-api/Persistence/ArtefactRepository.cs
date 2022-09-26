@@ -35,10 +35,10 @@ namespace art_gallery_api.Persistence
             return artefact;
         }
 
-        void IArtefactDataAccess.UpdateArtefact(int id, Artefact updatedArtefact)
+        void IArtefactDataAccess.UpdateArtefact(int id, int artistid, Artefact updatedArtefact)
         {
             string command = $"UPDATE {TABLE_NAME} SET title=@title, description=@description, medium=@medium, " +
-                $"year=@year, heightcm=@heightcm, widthcm=@widthcm, imgurl=@imgurl, artist=@artist, " +
+                $"year=@year, heightcm=@heightcm, widthcm=@widthcm, imgurl=@imgurl, artistid={artistid}, " +
                 $"modifieddate=@modifieddate WHERE id={id} RETURNING *";
 
             var queryArgs = new
@@ -50,17 +50,16 @@ namespace art_gallery_api.Persistence
                 heightcm = updatedArtefact.HeightCm,
                 widthcm = updatedArtefact.WidthCm,
                 imgurl = updatedArtefact.ImgUrl ?? (object)DBNull.Value,
-                artist = updatedArtefact.Artist,
                 modifieddate = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
         }
 
-        void IArtefactDataAccess.AddArtefact(Artefact newArtefact)
+        void IArtefactDataAccess.AddArtefact(int artistid, Artefact newArtefact)
         {
             string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @title, @description, @medium, @year, @heightcm," +
-                $" @widthcm, @imgurl, @artist, @createddate @modifieddate)";
+                $" @widthcm, @imgurl, @artistid, @createddate @modifieddate)";
 
             var queryArgs = new
             {
@@ -71,7 +70,7 @@ namespace art_gallery_api.Persistence
                 heightcm = newArtefact.HeightCm,
                 widthcm = newArtefact.WidthCm,
                 imgurl = newArtefact.ImgUrl ?? (object)DBNull.Value,
-                artist = newArtefact.Artist,
+                artistid,
                 createddate = DateTime.Now,
                 modifieddate = DateTime.Now
             };

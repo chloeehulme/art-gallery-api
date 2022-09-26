@@ -9,9 +9,9 @@ namespace art_gallery_api.Persistence
 
         Artist? GetArtistById(int id);
 
-        void UpdateArtist(int id, Artist updatedArtist);
+        void UpdateArtist(int id, int stateid, Artist updatedArtist);
 
-        void AddArtist(Artist newArtist);
+        void AddArtist(int stateid, Artist newArtist);
 
         void DeleteArtist(int id);
     }

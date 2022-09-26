@@ -27,31 +27,31 @@ namespace art_gallery_api.Controllers
             else return Ok(artefact);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateArtefact(int id, Artefact updatedArtefact)
+        [HttpPut("{artistid}/{id}")]
+        public IActionResult UpdateArtefact(int id, int artistid, Artefact updatedArtefact)
         {
             Artefact? artefact = _artefactRepo.GetArtefactById(id);
             if (artefact is null) return NotFound();
 
             try
             {
-                _artefactRepo.UpdateArtefact(id, updatedArtefact);
+                _artefactRepo.UpdateArtefact(id, artistid, updatedArtefact);
             }
             catch (Exception er) { return BadRequest(er); }
 
             return NoContent();
         }
 
-        [HttpPost()]
-        public IActionResult AddArtefact(Artefact newArtefact)
+        [HttpPost("{artistid}")]
+        public IActionResult AddArtefact(int artistid, Artefact newArtefact)
         {
             if (newArtefact is null) return BadRequest();
 
             if (_artefactRepo.GetArtefacts()
                 .Exists(x => x.Title.ToLower() == newArtefact.Title.ToLower()
-                && x.Artist.ToLower() == newArtefact.Artist.ToLower())) return Conflict();
+                && x.ArtistId == newArtefact.ArtistId)) return Conflict();
 
-            _artefactRepo.AddArtefact(newArtefact);
+            _artefactRepo.AddArtefact(artistid, newArtefact);
 
             return CreatedAtRoute("GetArtefact", new { id = newArtefact.Id }, newArtefact);
         }
@@ -65,6 +65,16 @@ namespace art_gallery_api.Controllers
             _artefactRepo.DeleteArtefact(id);
             return NoContent();
         }
+
+        // GET artefact by state name
+
+        // GET artefact by artist name
+
+        // GET artefact by language group
+
+        // GET artefact by medium
+
+        // GET artefact in classifiction (ie. modern) using postgres funtion
     }
 }
 

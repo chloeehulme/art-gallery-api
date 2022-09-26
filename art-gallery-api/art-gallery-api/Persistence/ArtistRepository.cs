@@ -35,9 +35,9 @@ namespace art_gallery_api.Persistence
             return artist;
         }
 
-        public void UpdateArtist(int id, Artist updatedArtist)
+        public void UpdateArtist(int id, int stateid, Artist updatedArtist)
         {
-            string command = $"UPDATE {TABLE_NAME} SET name=@name, description=@description, age=@age, state=@state" +
+            string command = $"UPDATE {TABLE_NAME} SET name=@name, description=@description, age=@age, stateid={stateid}, " +
                 $"languagegroup=@languagegroup, modifieddate=@modifieddate WHERE id={id}";
 
             var queryArgs = new
@@ -45,7 +45,6 @@ namespace art_gallery_api.Persistence
                 name = updatedArtist.Name,
                 description = updatedArtist.Description ?? (object)DBNull.Value,
                 age = updatedArtist.Age,
-                state = updatedArtist.State,
                 languagegroup = updatedArtist.LanguageGroup,
                 modifieddate = DateTime.Now
             };
@@ -53,9 +52,9 @@ namespace art_gallery_api.Persistence
             conn.Execute(command, queryArgs);
         }
 
-        public void AddArtist(Artist newArtist)
+        public void AddArtist(int stateid, Artist newArtist)
         {
-            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @name, @description, @age, @state, @languagegroup," +
+            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @name, @description, @age, @stateid, @languagegroup," +
                 $" @createddate, @modifieddate)";
 
             var queryArgs = new
@@ -63,7 +62,7 @@ namespace art_gallery_api.Persistence
                 name = newArtist.Name,
                 description = newArtist.Description,
                 age = newArtist.Age,
-                state = newArtist.State,
+                stateid,
                 languagegroup = newArtist.LanguageGroup,
                 createddate = DateTime.Now,
                 modifieddate = DateTime.Now
@@ -77,6 +76,12 @@ namespace art_gallery_api.Persistence
             string command = $"DELETE * FROM {TABLE_NAME} WHERE id={id}";
             conn.Query(command);
         }
+
+        // GET artist by state name:
+
+        // SELECT * FROM public.artist WHERE stateid=(SELECT * FROM public.state WHERE name={state name from uri})
+        // OR
+        // SELECT * FROM public.artist INNER JOIN public.state ON public.artist.stateid=(SELECT id from public.state WHERE name={}) AS sid
     }
 }
 

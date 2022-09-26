@@ -4,7 +4,7 @@ namespace art_gallery_api.Models
     public class Artefact
     {
         public int Id { get; set; }
-        public string Artist { get; set; } = null!;
+        public int ArtistId { get; set; }
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public string Medium { get; set; } = null!;
