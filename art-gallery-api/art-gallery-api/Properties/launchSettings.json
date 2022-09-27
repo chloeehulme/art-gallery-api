@@ -12,7 +12,7 @@
     "art_gallery_api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/art-gallery",
+      "launchUrl": "api/art-gallery/artefacts",
       "applicationUrl": "https://localhost:7071;http://localhost:5230",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -21,7 +21,7 @@
     "IIS Express": {
         "commandName": "IISExpress",
         "launchBrowser": true,
-        "launchUrl": "api/art-gallery",
+        "launchUrl": "api/art-gallery/artefacts",
         "environmentVariables": {
             "ASPNETCORE_ENVIRONMENT": "Development"
         }

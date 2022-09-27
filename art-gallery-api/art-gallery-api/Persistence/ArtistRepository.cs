@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using art_gallery_api.Models;
 using Dapper;
 using Npgsql;
@@ -19,6 +20,7 @@ namespace art_gallery_api.Persistence
             conn.Open();
         }
 
+        // working 
         public List<Artist> GetArtists()
         {
             string command = $"SELECT * FROM {TABLE_NAME}";
@@ -27,6 +29,7 @@ namespace art_gallery_api.Persistence
             return artists;
         }
 
+        // working
         public Artist? GetArtistById(int id)
         {
             string command = $"SELECT * FROM {TABLE_NAME} WHERE id={id}";
@@ -35,53 +38,90 @@ namespace art_gallery_api.Persistence
             return artist;
         }
 
-        public void UpdateArtist(int id, int stateid, Artist updatedArtist)
+        // working
+        public void UpdateArtist(int id, Artist updatedArtist)
         {
-            string command = $"UPDATE {TABLE_NAME} SET name=@name, description=@description, age=@age, stateid={stateid}, " +
-                $"languagegroup=@languagegroup, modifieddate=@modifieddate WHERE id={id}";
+            string command = $"UPDATE {TABLE_NAME} SET name=@name, description=@description, " +
+                $"age=@age, state_id=@state_id, language_group=@language_group, " +
+                $"modified_date=@modified_date WHERE id={id}";
 
             var queryArgs = new
             {
                 name = updatedArtist.Name,
                 description = updatedArtist.Description ?? (object)DBNull.Value,
                 age = updatedArtist.Age,
-                languagegroup = updatedArtist.LanguageGroup,
-                modifieddate = DateTime.Now
+                state_id = updatedArtist.StateId,
+                language_group = updatedArtist.LanguageGroup,
+                modified_date = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
         }
 
-        public void AddArtist(int stateid, Artist newArtist)
+        // working
+        public void AddArtist(int state_id, Artist newArtist)
         {
-            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @name, @description, @age, @stateid, @languagegroup," +
-                $" @createddate, @modifieddate)";
+            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @name, @description, " +
+                $"@age, @state_id, @language_group, @created_date, @modified_date)";
 
             var queryArgs = new
             {
                 name = newArtist.Name,
                 description = newArtist.Description,
                 age = newArtist.Age,
-                stateid,
-                languagegroup = newArtist.LanguageGroup,
-                createddate = DateTime.Now,
-                modifieddate = DateTime.Now
+                state_id,
+                language_group = newArtist.LanguageGroup,
+                created_date = DateTime.Now,
+                modified_date = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
         }
 
+        // working
         public void DeleteArtist(int id)
         {
-            string command = $"DELETE * FROM {TABLE_NAME} WHERE id={id}";
+            string command = $"DELETE FROM {TABLE_NAME} WHERE id={id}";
             conn.Query(command);
         }
 
-        // GET artist by state name:
+        // working
+        public List<Artist> GetArtistsByState(string state)
+        {
+            string fstate = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(state);
 
-        // SELECT * FROM public.artist WHERE stateid=(SELECT * FROM public.state WHERE name={state name from uri})
-        // OR
-        // SELECT * FROM public.artist INNER JOIN public.state ON public.artist.stateid=(SELECT id from public.state WHERE name={}) AS sid
+            string command = $"SELECT * FROM {TABLE_NAME} " +
+                $"WHERE state_id=(SELECT id FROM public.state " +
+                $"WHERE name='{fstate}');";
+
+            var artists = conn.Query<Artist>(command).AsList();
+            return artists;
+        }
+
+        // working
+        public IEnumerable<Artist> GetArtistsByLanguage(string language)
+        {
+            string flanguage = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(language);
+
+            string command = $"SELECT * FROM {TABLE_NAME} " +
+                $"WHERE language_group='{flanguage}'";
+
+            var artists = conn.Query<Artist>(command).AsList();
+            return artists;
+        }
+
+        // working
+        public IEnumerable<Artist> GetArtistsByArtefact(string title)
+        {
+            string ftitle = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title);
+
+            string command = $"SELECT * FROM {TABLE_NAME} " +
+                $"WHERE id=(SELECT artist_id FROM public.artefact " +
+                $"WHERE title='{ftitle}');";
+
+            var artists = conn.Query<Artist>(command).AsList();
+            return artists;
+        }
     }
 }
 

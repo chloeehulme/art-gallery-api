@@ -15,47 +15,74 @@ namespace art_gallery_api.Controllers
             _artefactRepo = artefactRepo;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet()]
         public IEnumerable<Artefact> GetAllArtefacts() =>
             _artefactRepo.GetArtefacts();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "GetArtefact")]
-        public IActionResult GetStateById(int id)
+        public IActionResult GetArtefactById(int id)
         {
             Artefact? artefact = _artefactRepo.GetArtefactById(id);
             if (artefact is null) return NotFound();
             else return Ok(artefact);
         }
 
-        [HttpPut("{artistid}/{id}")]
-        public IActionResult UpdateArtefact(int id, int artistid, Artefact updatedArtefact)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="artistid"></param>
+        /// <param name="updatedArtefact"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public IActionResult UpdateArtefact(int id, Artefact updatedArtefact)
         {
             Artefact? artefact = _artefactRepo.GetArtefactById(id);
             if (artefact is null) return NotFound();
 
             try
             {
-                _artefactRepo.UpdateArtefact(id, artistid, updatedArtefact);
+                _artefactRepo.UpdateArtefact(id, updatedArtefact);
             }
             catch (Exception er) { return BadRequest(er); }
 
             return NoContent();
         }
 
-        [HttpPost("{artistid}")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="artistid"></param>
+        /// <param name="newArtefact"></param>
+        /// <returns></returns>
+        [HttpPost("artist/{artistid}/artefact")]
         public IActionResult AddArtefact(int artistid, Artefact newArtefact)
         {
             if (newArtefact is null) return BadRequest();
 
             if (_artefactRepo.GetArtefacts()
                 .Exists(x => x.Title.ToLower() == newArtefact.Title.ToLower()
-                && x.ArtistId == newArtefact.ArtistId)) return Conflict();
+                && x.ArtistId == artistid)) return Conflict();
 
             _artefactRepo.AddArtefact(artistid, newArtefact);
 
             return CreatedAtRoute("GetArtefact", new { id = newArtefact.Id }, newArtefact);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public IActionResult DeleteArtefact(int id)
         {
@@ -66,13 +93,29 @@ namespace art_gallery_api.Controllers
             return NoContent();
         }
 
-        // GET artefact by state name
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [HttpGet("state/{state}", Name = "GetArtefactByState")]
+        public IEnumerable<Artefact> GetArtefactByState(string state) =>
+            _artefactRepo.GetArtefactByState(state);
 
-        // GET artefact by artist name
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        [HttpGet("language/{language}", Name = "GetArtefactByLanguage")]
+        public IEnumerable<Artefact> GetArtefactsByLanguage(string language) =>
+            _artefactRepo.GetArtefactsByLanguage(language);
 
-        // GET artefact by language group
 
-        // GET artefact by medium
+        [HttpGet("artist/{artist}", Name = "GetArtefactByArtist")]
+        public IEnumerable<Artefact> GetArtefactsByArtist(string artist) =>
+            _artefactRepo.GetArtefactsByArtist(artist);
+
 
         // GET artefact in classifiction (ie. modern) using postgres funtion
     }

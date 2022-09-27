@@ -19,31 +19,35 @@ namespace art_gallery_api.Persistence
             conn.Open();
         }
 
+        // working
         public List<State> GetStates()
         {
-            string command = $"SELECT * FROM {TABLE_NAME}";
+            string command = $"SELECT id, name, language_groups, created_date, modified_date FROM {TABLE_NAME}";
 
             var states = conn.Query<State>(command).AsList();
             return states;
         }
 
+        // working
         public State? GetStateById(int id)
         {
-            string command = $"SELECT * FROM {TABLE_NAME} WHERE id={id}";
+            string command = $"SELECT id, name, language_groups, created_date, modified_date " +
+                $"FROM {TABLE_NAME} WHERE id={id}";
 
             var state = conn.QueryFirstOrDefault<State>(command);
             return state;
         }
 
+        // working
         public void UpdateState(int id, State updatedState)
         {
-            string command = $"UPDATE {TABLE_NAME} SET name=@name, languagegroups=@languagegroups," +
-                $"modifieddate=@modifieddate WHERE id={id} RETURNING *";
+            string command = $"UPDATE {TABLE_NAME} SET name=@name, language_groups=@language_groups," +
+                $"modified_date=@modified_date WHERE id={id} RETURNING *";
 
             var queryArgs = new
             {
                 name = updatedState.Name,
-                languagegroups = updatedState.LanguageGroups,
+                language_groups = updatedState.LanguageGroups,
                 modifieddate = DateTime.Now
             };
 

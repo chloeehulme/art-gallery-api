@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using art_gallery_api.Models;
 using art_gallery_api.Persistence;
 using Microsoft.AspNetCore.Mvc;
@@ -15,34 +16,56 @@ namespace art_gallery_api.Controllers
             _artistRepo = artistRepo;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet()]
         public IEnumerable<Artist> GetAllArtists() =>
             _artistRepo.GetArtists();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "GetArtist")]
-        public IActionResult GetStateById(int id)
+        public IActionResult GetArtistById(int id)
         {
             Artist? artist = _artistRepo.GetArtistById(id);
             if (artist is null) return NotFound();
             else return Ok(artist);
         }
 
-        [HttpPut("{stateid}/{id}")]
-        public IActionResult UpdateArtist(int id, int stateid, Artist updatedArtist)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="stateid"></param>
+        /// <param name="updatedArtist"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public IActionResult UpdateArtist(int id, Artist updatedArtist)
         {
             Artist? artist = _artistRepo.GetArtistById(id);
             if (artist is null) return NotFound();
 
             try
             {
-                _artistRepo.UpdateArtist(id, stateid, updatedArtist);
+                _artistRepo.UpdateArtist(id, updatedArtist);
             }
             catch (Exception er) { return BadRequest(er); }
 
             return NoContent();
         }
 
-        [HttpPost("{stateid}")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stateid"></param>
+        /// <param name="newArtist"></param>
+        /// <returns></returns>
+        [HttpPost("state/{stateid}/artist")]
         public IActionResult AddArtist(int stateid, Artist newArtist)
         {
             if (newArtist is null) return BadRequest();
@@ -55,6 +78,11 @@ namespace art_gallery_api.Controllers
             return CreatedAtRoute("GetArtist", new { id = newArtist.Id }, newArtist);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public IActionResult DeleteArtist(int id)
         {
@@ -65,9 +93,33 @@ namespace art_gallery_api.Controllers
             return NoContent();
         }
 
-        // GET artist by state name (split string at % -> new%south%wales)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [HttpGet("state/{state}", Name = "GetArtistByState")]
+        public IEnumerable<Artist> GetArtistsByState(string state) =>
+            _artistRepo.GetArtistsByState(state);
 
-        // GET artist by language group name
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        [HttpGet("language/{language}", Name = "GetArtistByLanguage")]
+        public IEnumerable<Artist> GetArtistsByLanguage(string language) =>
+            _artistRepo.GetArtistsByLanguage(language);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        [HttpGet("artefact/{title}", Name = "GetArtistByArtefact")]
+        public IEnumerable<Artist> GetArtistsByArtefact(string title) =>
+            _artistRepo.GetArtistsByArtefact(title);
+
 
         // GET artist by age
 

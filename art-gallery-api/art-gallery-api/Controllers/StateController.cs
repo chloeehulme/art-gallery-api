@@ -16,11 +16,20 @@ namespace art_gallery_api.Controllers
             _stateRepo = stateRepo;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet()]
         public IEnumerable<State> GetAllStatesAndTerritories() =>
             _stateRepo.GetStates();
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "GetStateById")]
         public IActionResult GetStateById(int id)
         {
@@ -29,6 +38,12 @@ namespace art_gallery_api.Controllers
             else return Ok(state);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedState"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public IActionResult UpdateState(int id, State updatedState)
         {
