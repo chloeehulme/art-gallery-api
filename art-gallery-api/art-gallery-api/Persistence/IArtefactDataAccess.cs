@@ -20,6 +20,8 @@ namespace art_gallery_api.Persistence
         IEnumerable<Artefact> GetArtefactsByLanguage(string language);
 
         IEnumerable<Artefact> GetArtefactsByArtist(string artist);
+
+        int GetRecentArtefactCount();
     }
 }
 

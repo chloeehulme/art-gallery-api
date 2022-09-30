@@ -20,7 +20,6 @@ namespace art_gallery_api.Persistence
             conn.Open();
         }
 
-
         // Gets all users from DB
         public List<User> GetUsers()
         {
@@ -33,7 +32,7 @@ namespace art_gallery_api.Persistence
         // Gets all admin users from DB
         public List<User> GetAdminUsers()
         {
-            string command = $"SELECT* FROM {TABLE_NAME} WHERE role={"role"}";
+            string command = $"SELECT * FROM {TABLE_NAME} WHERE role='admin'";
 
             var users = conn.Query<User>(command).AsList();
             return users;
@@ -51,8 +50,8 @@ namespace art_gallery_api.Persistence
         // Adds user to DB
         public void AddUser(User newUser)
         {
-            string command = $"INSERT INTO {TABLE_NAME} OUTPUT INSERTED.* VALUES(DEFAULT, @email, @firstname, @lastname, " +
-                    "@passwordhash, @description, @role, @createddate, @modifieddate)";
+            string command = $"INSERT INTO {TABLE_NAME} VALUES(DEFAULT, @email, @first_name, @last_name, " +
+                    "@password_hash, @description, @role, @created_date, @modified_date)";
 
             var password = newUser.PasswordHash;
             var user = newUser;
@@ -63,13 +62,13 @@ namespace art_gallery_api.Persistence
             var queryArgs = new
             {
                 email = newUser.Email,
-                firstname = newUser.FirstName,
-                lastname = newUser.LastName,
-                passwordhash = newUser.PasswordHash,
+                first_name = newUser.FirstName,
+                last_name = newUser.LastName,
+                password_hash = newUser.PasswordHash,
                 description = newUser.Description,
                 role = newUser.Role,
-                createddate = DateTime.Now,
-                modifieddate = DateTime.Now
+                created_date = DateTime.Now,
+                modified_date = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
@@ -80,19 +79,19 @@ namespace art_gallery_api.Persistence
         {
             var user = GetUserById(id);
 
-            string command = $"UPDATE {TABLE_NAME} SET email=@email, passwordhash=@passwordhash, " +
-                "firstname=@firstname, lastname=@lastname, description=@description, role=@role, " +
-                $"modifieddate=@modifieddate WHERE id={id}";
+            string command = $"UPDATE {TABLE_NAME} SET email=@email, password_hash=@password_hash, " +
+                "first_name=@first_name, last_name=@last_name, description=@description, role=@role, " +
+                $"modified_date=@modified_date WHERE id={id}";
 
             var queryArgs = new
             {
                 email = user!.Email,
-                passwordhash = user.PasswordHash,
-                firstname = updatedUser.FirstName,
-                lastname = updatedUser.LastName,
+                password_hash = user.PasswordHash,
+                first_name = updatedUser.FirstName,
+                last_name = updatedUser.LastName,
                 description = updatedUser.Description ?? (object)DBNull.Value,
                 role = updatedUser.Role ?? (object)DBNull.Value,
-                modifieddate = DateTime.Now
+                modified_date = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
@@ -108,8 +107,8 @@ namespace art_gallery_api.Persistence
         // Patches email and password of user in DB
         public void PatchUser(int id, Login updatedLogin)
         {
-            string command = $"UPDATE {TABLE_NAME} SET email=@email, passwordhash=@passwordhash," +
-                $" modifieddate=@modifieddate WHERE id={id}";
+            string command = $"UPDATE {TABLE_NAME} SET email=@email, password_hash=@password_hash," +
+                $" modified_date=@modified_date WHERE id={id}";
 
             var password = updatedLogin.Password;
             var user = GetUserById(id)!;
@@ -119,8 +118,8 @@ namespace art_gallery_api.Persistence
             var queryArgs = new
             {
                 email = updatedLogin.Email,
-                passwordhash = pwHash,
-                modifieddate = DateTime.Now
+                password_hash = pwHash,
+                modified_date = DateTime.Now
             };
 
             conn.Execute(command, queryArgs);
@@ -129,9 +128,9 @@ namespace art_gallery_api.Persistence
         // Gets user by email from DB
         public User? GetUserByEmail(string email)
         {
-            string command = $"SELECT * FROM {TABLE_NAME} WHERE email={email}";
+            string command = $"SELECT * FROM {TABLE_NAME} WHERE email='{email}'";
 
-            var user = conn.QueryFirstOrDefault<User>(command);
+            var user = conn.QuerySingleOrDefault<User>(command);
             return user;
         }
     }

@@ -131,6 +131,19 @@ namespace art_gallery_api.Persistence
             var artefacts = conn.Query<Artefact>(command).AsList();
             return artefacts;
         }
+
+        // working
+        public int GetRecentArtefactCount()
+        {
+            DateTime currentdate = DateTime.Now;
+            int yearfrom = currentdate.Year - 5;
+            int yearto = currentdate.Year;
+
+            string command = $"SELECT get_artefact_count({yearfrom}, {yearto});";
+
+            int count = conn.QueryFirstOrDefault<int>(command);
+            return count;
+        }
     }
 }
 

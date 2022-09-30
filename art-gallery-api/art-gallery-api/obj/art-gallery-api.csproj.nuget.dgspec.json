@@ -46,10 +46,6 @@
             "Npgsql": {
               "target": "Package",
               "version": "[6.0.7, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.2.3, )"
             }
           },
           "imports": [

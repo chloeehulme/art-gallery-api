@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using art_gallery_api.Models;
 using art_gallery_api.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace art_gallery_api.Controllers
@@ -21,6 +22,7 @@ namespace art_gallery_api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet()]
+        [AllowAnonymous]
         public IEnumerable<State> GetAllStatesAndTerritories() =>
             _stateRepo.GetStates();
 
@@ -31,6 +33,7 @@ namespace art_gallery_api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}", Name = "GetStateById")]
+        [AllowAnonymous]
         public IActionResult GetStateById(int id)
         {
             State? state = _stateRepo.GetStateById(id);
@@ -44,7 +47,7 @@ namespace art_gallery_api.Controllers
         /// <param name="id"></param>
         /// <param name="updatedState"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Policy = "AdminOnly")]
         public IActionResult UpdateState(int id, State updatedState)
         {
             State? state = _stateRepo.GetStateById(id);

@@ -1,17 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "08YefK2LyONrid1fei03TF09M9jGDRY+/gSQ8OBGFif4eGNoWbZdGAHvznmSH7BVYPBVYLq9V5LWTnNliJwKRA==",
+  "dgSpecHash": "usN8IMvV9HgNxlhdFNI2ZnR7iNO6/DHM4ex6G1rm1Q/jutR328SEvRtFgy6uG4YrnjCInOhSVBfTFdxukEgggQ==",
   "success": true,
   "projectFilePath": "/Users/chloehulme/Documents/SIT331/art-gallery-api/art-gallery-api/art-gallery-api.csproj",
   "expectedPackageFiles": [
     "/Users/chloehulme/.nuget/packages/dapper/2.0.123/dapper.2.0.123.nupkg.sha512",
-    "/Users/chloehulme/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
-    "/Users/chloehulme/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
     "/Users/chloehulme/.nuget/packages/npgsql/6.0.7/npgsql.6.0.7.nupkg.sha512",
-    "/Users/chloehulme/.nuget/packages/swashbuckle.aspnetcore/6.2.3/swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
-    "/Users/chloehulme/.nuget/packages/swashbuckle.aspnetcore.swagger/6.2.3/swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
-    "/Users/chloehulme/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.2.3/swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
-    "/Users/chloehulme/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.2.3/swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
     "/Users/chloehulme/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
   "logs": []

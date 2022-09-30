@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using art_gallery_api.Models;
 using art_gallery_api.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace art_gallery_api.Controllers
@@ -21,6 +22,7 @@ namespace art_gallery_api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet()]
+        [AllowAnonymous]
         public IEnumerable<Artist> GetAllArtists() =>
             _artistRepo.GetArtists();
 
@@ -30,6 +32,7 @@ namespace art_gallery_api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}", Name = "GetArtist")]
+        [AllowAnonymous]
         public IActionResult GetArtistById(int id)
         {
             Artist? artist = _artistRepo.GetArtistById(id);
@@ -44,7 +47,7 @@ namespace art_gallery_api.Controllers
         /// <param name="stateid"></param>
         /// <param name="updatedArtist"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Policy = "AdminOnly")]
         public IActionResult UpdateArtist(int id, Artist updatedArtist)
         {
             Artist? artist = _artistRepo.GetArtistById(id);
@@ -65,7 +68,7 @@ namespace art_gallery_api.Controllers
         /// <param name="stateid"></param>
         /// <param name="newArtist"></param>
         /// <returns></returns>
-        [HttpPost("state/{stateid}/artist")]
+        [HttpPost("state/{stateid}/artist"), Authorize(Policy = "AdminOnly")]
         public IActionResult AddArtist(int stateid, Artist newArtist)
         {
             if (newArtist is null) return BadRequest();
@@ -83,7 +86,7 @@ namespace art_gallery_api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Policy = "AdminOnly")]
         public IActionResult DeleteArtist(int id)
         {
             Artist? artist = _artistRepo.GetArtistById(id);
@@ -99,6 +102,7 @@ namespace art_gallery_api.Controllers
         /// <param name="state"></param>
         /// <returns></returns>
         [HttpGet("state/{state}", Name = "GetArtistByState")]
+        [AllowAnonymous]
         public IEnumerable<Artist> GetArtistsByState(string state) =>
             _artistRepo.GetArtistsByState(state);
 
@@ -108,6 +112,7 @@ namespace art_gallery_api.Controllers
         /// <param name="language"></param>
         /// <returns></returns>
         [HttpGet("language/{language}", Name = "GetArtistByLanguage")]
+        [AllowAnonymous]
         public IEnumerable<Artist> GetArtistsByLanguage(string language) =>
             _artistRepo.GetArtistsByLanguage(language);
 
@@ -117,13 +122,18 @@ namespace art_gallery_api.Controllers
         /// <param name="title"></param>
         /// <returns></returns>
         [HttpGet("artefact/{title}", Name = "GetArtistByArtefact")]
+        [AllowAnonymous]
         public IEnumerable<Artist> GetArtistsByArtefact(string title) =>
             _artistRepo.GetArtistsByArtefact(title);
 
-
-        // GET artist by age
-
-        // GET using postgres funtion
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("victorian")]
+        [AllowAnonymous]
+        public int GetVictorianArtistCount() =>
+            _artistRepo.GetVictorianArtistCount();
     }
 }
 

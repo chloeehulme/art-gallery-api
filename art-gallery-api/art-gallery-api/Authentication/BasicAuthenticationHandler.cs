@@ -11,7 +11,7 @@ namespace art_gallery_api.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-     
+
         public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger,
             UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
         {
@@ -36,6 +36,7 @@ namespace art_gallery_api.Authentication
             string[] credentials = authHeaderDecoded.Split(":", 2);
             string email = credentials[0];
             string password = credentials[1];
+
             User? user = _repo.GetUserByEmail(email);
 
             if (user is null)
@@ -54,7 +55,6 @@ namespace art_gallery_api.Authentication
                 var claims = new[]
                     {
                         new Claim("name", $"{user.FirstName} {user.LastName}"),
-                        new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Role)
                     };
 
@@ -76,4 +76,3 @@ namespace art_gallery_api.Authentication
         }
     }
 }
-

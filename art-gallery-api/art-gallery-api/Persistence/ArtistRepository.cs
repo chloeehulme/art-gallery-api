@@ -122,6 +122,15 @@ namespace art_gallery_api.Persistence
             var artists = conn.Query<Artist>(command).AsList();
             return artists;
         }
+
+        // working
+        public int GetVictorianArtistCount()
+        {
+            string command = "SELECT get_artist_count_by_state(1)";
+
+            int count = conn.QueryFirstOrDefault<int>(command);
+            return count;
+        }
     }
 }
 

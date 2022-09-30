@@ -20,6 +20,8 @@ namespace art_gallery_api.Persistence
         IEnumerable<Artist> GetArtistsByLanguage(string language);
 
         IEnumerable<Artist> GetArtistsByArtefact(string title);
+
+        int GetVictorianArtistCount();
     }
 }
 
