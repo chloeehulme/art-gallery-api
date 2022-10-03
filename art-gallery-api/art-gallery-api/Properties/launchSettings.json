@@ -19,12 +19,12 @@
       }
     },
     "IIS Express": {
-        "commandName": "IISExpress",
-        "launchBrowser": true,
-        "launchUrl": "api/art-gallery/artefacts",
-        "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "api/art-gallery/artefacts",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }

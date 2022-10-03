@@ -18,9 +18,12 @@ namespace art_gallery_api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Gets all states.
         /// </summary>
-        /// <returns></returns>
+        /// <returns> A list of all states. </returns>
+        /// <response code="200"> Returns a list of all states, or an empty
+        /// list if there are currently none stored. </response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet()]
         [AllowAnonymous]
         public IEnumerable<State> GetAllStatesAndTerritories() =>
@@ -28,10 +31,15 @@ namespace art_gallery_api.Controllers
 
 
         /// <summary>
-        /// 
+        /// Gets a state with the specified id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id"> The id for the state we are looking to return (from the request URL).</param>
+        /// <returns> A state with the specified id.</returns>
+        /// <response code="200"> Returns the state with the specified id. </response>
+        /// <response code="404"> If the state retrieved at the specified id is null,
+        /// ie. the state does not exist. </response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}", Name = "GetStateById")]
         [AllowAnonymous]
         public IActionResult GetStateById(int id)
@@ -42,11 +50,27 @@ namespace art_gallery_api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Updates an existing state.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="updatedState"></param>
-        /// <returns></returns>
+        /// <param name="id"> The id for the state we are looking to update (from the request URL). </param>
+        /// <param name="updatedState"> Updated details for the state (from the HTTP request body). </param>
+        /// <returns> No content. </returns>
+        /// <remarks>
+        /// Sample request body:
+        ///
+        ///     PUT /api/art-gallery/states/{id}
+        ///     {
+        ///         "name": "Victoria,
+        ///         "languageGroups": 38
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="204"> If the state is udpated successfully. </response>
+        /// <response code="400"> If the request body is null. </response>
+        /// <response code="404"> If the state to update is null. </response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut("{id}"), Authorize(Policy = "AdminOnly")]
         public IActionResult UpdateState(int id, State updatedState)
         {
